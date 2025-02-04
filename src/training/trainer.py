@@ -1,14 +1,15 @@
 # src/training/trainer.py
 
+import os
+import logging
+from typing import Optional, Dict, Any
+
 import torch
-from torch import nn
+import torch.nn as nn
 from torch.utils.data import DataLoader
-import torch.amp  # For mixed precision training
+from torch.cuda.amp import autocast
 import wandb
 from tqdm import tqdm
-import logging
-import os
-from typing import Optional, Dict, Any
 
 class Trainer:
     def __init__(
@@ -45,7 +46,7 @@ class Trainer:
         # Initialize wandb
         self.setup_wandb(experiment_name)
         
-        # Save initial model if needed
+        # Create checkpoint directory
         os.makedirs('checkpoints', exist_ok=True)
         
     def setup_logging(self):
@@ -81,9 +82,9 @@ class Trainer:
             gpu_memory = torch.cuda.get_device_properties(self.config.cuda_device).total_memory / 1e9
             self.logger.info(f"Using GPU: {gpu_name} with {gpu_memory:.2f} GB memory")
             
-            # Setup mixed precision training using new API
+            # Setup mixed precision training
             if self.config.fp16:
-                self.scaler = torch.amp.GradScaler('cuda')  # Updated to new API
+                self.scaler = torch.amp.GradScaler('cuda')
             else:
                 self.scaler = None
         else:
@@ -117,7 +118,7 @@ class Trainer:
         except Exception as e:
             self.logger.warning(f"Failed to log metrics to wandb: {str(e)}")
             
-    def save_checkpoint(self, epoch: int, loss: float):
+    def save_checkpoint(self, epoch: int, loss: float, is_best: bool = False):
         """Save a model checkpoint."""
         try:
             checkpoint = {
@@ -131,9 +132,17 @@ class Trainer:
             if self.scaler is not None:
                 checkpoint['scaler_state_dict'] = self.scaler.state_dict()
                 
+            # Save regular checkpoint
             path = f'checkpoints/checkpoint_epoch_{epoch}.pt'
             torch.save(checkpoint, path)
             self.logger.info(f"Saved checkpoint: {path}")
+            
+            # Save best model separately if it's the best so far
+            if is_best:
+                best_path = 'checkpoints/best_model.pt'
+                torch.save(checkpoint, best_path)
+                self.logger.info(f"Saved best model: {best_path}")
+                
         except Exception as e:
             self.logger.error(f"Failed to save checkpoint: {str(e)}")
             
@@ -154,21 +163,32 @@ class Trainer:
             
     def train_step(self, batch: Dict[str, torch.Tensor]) -> float:
         """Perform a single training step."""
-        # Move batch to device
-        input_ids = batch['input_ids'].to(self.device)
-        labels = batch['labels'].to(self.device)
-        
-        # Zero gradients
-        self.optimizer.zero_grad()
-        
         try:
+            # Move batch to device
+            input_ids = batch['input_ids'].to(self.device)
+            labels = batch['labels'].to(self.device)
+            
+            # Log memory usage
+            if torch.cuda.is_available():
+                gpu_memory = torch.cuda.memory_allocated() / 1e9
+                if gpu_memory > 7.0:  # Alert if using more than 7GB
+                    self.logger.warning(f"High GPU memory usage: {gpu_memory:.2f} GB")
+            
+            # Zero gradients
+            self.optimizer.zero_grad()
+            
             # Forward pass with mixed precision
-            with torch.amp.autocast('cuda', enabled=self.config.fp16):  # Updated autocast
+            with autocast('cuda', enabled=self.config.fp16):
                 outputs = self.model(input_ids)
                 loss = torch.nn.functional.cross_entropy(
                     outputs.view(-1, outputs.size(-1)),
                     labels.view(-1)
                 )
+                
+            # Check for invalid loss
+            if not torch.isfinite(loss):
+                self.logger.error("Loss is not finite!")
+                return float('inf')
                 
             # Backward pass with gradient scaling if using mixed precision
             if self.scaler is not None:
@@ -183,13 +203,14 @@ class Trainer:
                 self.optimizer.step()
                 
             return loss.item()
-            
+                
         except RuntimeError as e:
             if "out of memory" in str(e):
                 if hasattr(torch.cuda, 'empty_cache'):
                     torch.cuda.empty_cache()
                 self.logger.error("GPU out of memory. Trying to recover...")
                 return float('inf')
+            self.logger.error(f"Error in train_step: {str(e)}")
             raise e
 
     def validate(self) -> float:
@@ -206,7 +227,7 @@ class Trainer:
                 input_ids = batch['input_ids'].to(self.device)
                 labels = batch['labels'].to(self.device)
                 
-                with torch.amp.autocast('cuda', enabled=self.config.fp16):  # Updated autocast
+                with autocast('cuda', enabled=self.config.fp16):
                     outputs = self.model(input_ids)
                     loss = torch.nn.functional.cross_entropy(
                         outputs.view(-1, outputs.size(-1)),
@@ -226,12 +247,15 @@ class Trainer:
         # Load checkpoint if resuming
         if resume_from:
             start_epoch, _ = self.load_checkpoint(resume_from)
-            
+            self.logger.info(f"Resuming from epoch {start_epoch}")
+        
         # Move model to device
         self.model = self.model.to(self.device)
         
         try:
             for epoch in range(start_epoch, self.config.max_epochs):
+                self.logger.info(f"Starting epoch {epoch + 1}/{self.config.max_epochs}")
+                
                 # Training phase
                 self.model.train()
                 epoch_loss = 0
@@ -239,10 +263,16 @@ class Trainer:
                 
                 with tqdm(self.train_loader, desc=f"Epoch {epoch + 1}/{self.config.max_epochs}") as pbar:
                     for batch_idx, batch in enumerate(pbar):
+                        # Monitor memory periodically
+                        if batch_idx % 100 == 0 and torch.cuda.is_available():
+                            gpu_memory = torch.cuda.memory_allocated() / 1e9
+                            self.logger.info(f"GPU Memory used: {gpu_memory:.2f} GB")
+                        
                         batch_loss = self.train_step(batch)
                         
                         if batch_loss == float('inf'):
-                            continue  # Skip batch if OOM occurred
+                            self.logger.warning(f"Skipping batch {batch_idx} due to infinite loss")
+                            continue
                             
                         epoch_loss += batch_loss
                         num_batches += 1
@@ -250,7 +280,8 @@ class Trainer:
                         # Update progress bar
                         pbar.set_postfix({
                             'loss': f'{batch_loss:.4f}',
-                            'avg_loss': f'{epoch_loss/num_batches:.4f}'
+                            'avg_loss': f'{epoch_loss/num_batches:.4f}',
+                            'batch': f'{batch_idx}/{len(self.train_loader)}'
                         })
                         
                         # Log batch metrics
@@ -258,11 +289,13 @@ class Trainer:
                             self.log_metrics({
                                 'batch_loss': batch_loss,
                                 'batch': batch_idx + epoch * len(self.train_loader),
-                                'learning_rate': self.optimizer.param_groups[0]['lr']
+                                'learning_rate': self.optimizer.param_groups[0]['lr'],
+                                'gpu_memory_gb': torch.cuda.memory_allocated() / 1e9 if torch.cuda.is_available() else 0
                             })
-                            
+                
                 # Calculate epoch metrics
                 avg_epoch_loss = epoch_loss / num_batches if num_batches > 0 else float('inf')
+                self.logger.info(f"Running validation for epoch {epoch + 1}...")
                 val_loss = self.validate()
                 
                 # Log epoch metrics
@@ -272,21 +305,26 @@ class Trainer:
                     'val_loss': val_loss
                 })
                 
-                # Save checkpoint if validation improved
+                # Save checkpoint for every epoch
+                self.save_checkpoint(epoch, val_loss, is_best=False)
+                
+                # Save best model separately if validation improved
                 if val_loss < best_val_loss:
                     best_val_loss = val_loss
-                    self.save_checkpoint(epoch, val_loss)
-                    
+                    self.save_checkpoint(epoch, val_loss, is_best=True)
+                    self.logger.info(f"New best validation loss: {val_loss:.4f}")
+                
                 # Log to console
                 self.logger.info(
-                    f"Epoch {epoch + 1}/{self.config.max_epochs} - "
+                    f"Epoch {epoch + 1}/{self.config.max_epochs} completed - "
                     f"Train Loss: {avg_epoch_loss:.4f} - "
-                    f"Val Loss: {val_loss:.4f}"
+                    f"Val Loss: {val_loss:.4f} - "
+                    f"Best Val Loss: {best_val_loss:.4f}"
                 )
                 
         except KeyboardInterrupt:
             self.logger.info("Training interrupted by user.")
-            self.save_checkpoint(epoch, avg_epoch_loss)
+            self.save_checkpoint(epoch, avg_epoch_loss, is_best=False)
             
         except Exception as e:
             self.logger.error(f"Training failed: {str(e)}")

@@ -5,14 +5,14 @@ from dataclasses import dataclass
 class ModelConfig:
     # Model Architecture
     vocab_size: int = 50257
-    hidden_size: int = 768
-    num_layers: int = 6
-    num_heads: int = 12
-    max_seq_length: int = 512
+    hidden_size: int = 512
+    num_layers: int = 4
+    num_heads: int = 8
+    max_seq_length: int = 256
     dropout: float = 0.1
 
     # Training
-    batch_size: int = 32
+    batch_size: int = 16
     learning_rate: float = 3e-4
     weight_decay: float = 0.01
     max_epochs: int = 10
