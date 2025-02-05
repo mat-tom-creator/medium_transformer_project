@@ -40,25 +40,28 @@ class Metrics:
             # Set pad token if not set
             if self.tokenizer.pad_token is None:
                 self.tokenizer.pad_token = self.tokenizer.eos_token
+                self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
+            
+            max_length = min(max_length, 1024)
             
             with torch.no_grad():
-                # Generate
                 outputs = model.generate(
                     input_ids,
                     max_length=max_length,
-                    num_return_sequences=1,
-                    temperature=0.7,
+                    temperature=0.9,
                     do_sample=True,
+                    top_k=50,
+                    top_p=0.95,
                     pad_token_id=self.tokenizer.pad_token_id,
                     bos_token_id=self.tokenizer.bos_token_id,
                     eos_token_id=self.tokenizer.eos_token_id
                 )
                 
-                # Decode
                 generated_text = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+                if generated_text == prompt:
+                    return f"{prompt} [Generation failed to produce new tokens]"
+                return generated_text
                 
-            return generated_text
-            
         except Exception as e:
             self.logger.error(f"Error generating text: {str(e)}")
             return f"Error generating text: {str(e)}"

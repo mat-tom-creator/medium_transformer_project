@@ -82,3 +82,181 @@ Check the documentation of torch.load to learn more about types accepted by defa
 2025-02-04 22:26:07,006 - Trainer - INFO - Epoch 9/10 - Train Loss: 0.0000 - Val Loss: 0.0106
 2025-02-04 22:29:03,754 - Trainer - INFO - Epoch 10/10 - Train Loss: 0.0000 - Val Loss: 0.0107
 2025-02-04 22:29:07,782 - __main__ - INFO - Training completed. Best validation loss: 0.0105
+2025-02-05 00:11:21,956 - __main__ - INFO - Initializing configuration...
+2025-02-05 00:11:21,957 - __main__ - INFO - Collecting data...
+2025-02-05 00:11:39,398 - __main__ - INFO - Preprocessing data...
+2025-02-05 00:11:58,535 - __main__ - INFO - Initializing model...
+2025-02-05 00:11:58,892 - __main__ - INFO - Setting up trainer...
+2025-02-05 00:11:58,897 - Trainer - INFO - Using GPU: NVIDIA GeForce RTX 4070 Laptop GPU with 8.59 GB memory
+2025-02-05 00:12:00,747 - __main__ - INFO - Starting training...
+2025-02-05 00:12:00,910 - Trainer - INFO - Starting epoch 1/10
+2025-02-05 00:12:00,922 - Trainer - INFO - GPU Memory used: 0.54 GB
+2025-02-05 00:12:00,927 - Trainer - ERROR - Training failed: autocast.__init__() got multiple values for argument 'enabled'
+2025-02-05 00:12:04,386 - __main__ - ERROR - Training failed: autocast.__init__() got multiple values for argument 'enabled'
+2025-02-05 00:14:48,948 - __main__ - INFO - Initializing configuration...
+2025-02-05 00:14:48,948 - __main__ - INFO - Collecting data...
+2025-02-05 00:15:07,580 - __main__ - INFO - Initializing configuration...
+2025-02-05 00:15:07,580 - __main__ - INFO - Collecting data...
+2025-02-05 00:15:25,353 - __main__ - INFO - Preprocessing data...
+2025-02-05 00:15:36,754 - __main__ - INFO - Initializing model...
+2025-02-05 00:15:37,106 - __main__ - INFO - Setting up trainer...
+2025-02-05 00:15:37,108 - Trainer - INFO - Using GPU: NVIDIA GeForce RTX 4070 Laptop GPU with 8.59 GB memory
+2025-02-05 00:15:38,663 - __main__ - INFO - Starting training...
+2025-02-05 00:15:38,812 - Trainer - INFO - Starting epoch 1/10
+2025-02-05 00:15:38,817 - Trainer - INFO - GPU Memory used: 0.54 GB
+2025-02-05 00:18:33,846 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:21:28,358 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:24:22,882 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:27:17,393 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:30:11,913 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:33:06,407 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:36:00,923 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:38:55,427 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:39:14,266 - Trainer - INFO - Running validation for epoch 1...
+2025-02-05 00:40:01,218 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_0.pt
+2025-02-05 00:40:03,298 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_0.pt
+2025-02-05 00:40:06,104 - Trainer - INFO - Saved best model: checkpoints/best_model.pt
+2025-02-05 00:40:06,105 - Trainer - INFO - New best validation loss: 0.0365
+2025-02-05 00:40:06,106 - Trainer - INFO - Epoch 1/10 completed - Train Loss: 0.3681 - Val Loss: 0.0365 - Best Val Loss: 0.0365
+2025-02-05 00:40:06,106 - Trainer - INFO - Starting epoch 2/10
+2025-02-05 00:40:06,108 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:43:00,859 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:45:55,370 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:48:49,875 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:51:44,392 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:54:38,897 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 00:57:33,401 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:00:27,902 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:03:22,417 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:03:41,256 - Trainer - INFO - Running validation for epoch 2...
+2025-02-05 01:04:29,275 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_1.pt
+2025-02-05 01:04:31,395 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_1.pt
+2025-02-05 01:04:33,761 - Trainer - INFO - Saved best model: checkpoints/best_model.pt
+2025-02-05 01:04:33,762 - Trainer - INFO - New best validation loss: 0.0129
+2025-02-05 01:04:33,763 - Trainer - INFO - Epoch 2/10 completed - Train Loss: 0.0136 - Val Loss: 0.0129 - Best Val Loss: 0.0129
+2025-02-05 01:04:33,763 - Trainer - INFO - Starting epoch 3/10
+2025-02-05 01:04:33,766 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:07:28,647 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:10:23,137 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:13:17,655 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:16:12,262 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:19:06,517 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:22:00,788 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:24:55,056 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:27:49,319 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:28:08,133 - Trainer - INFO - Running validation for epoch 3...
+2025-02-05 01:28:55,364 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_2.pt
+2025-02-05 01:28:57,455 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_2.pt
+2025-02-05 01:28:59,695 - Trainer - INFO - Saved best model: checkpoints/best_model.pt
+2025-02-05 01:28:59,696 - Trainer - INFO - New best validation loss: 0.0099
+2025-02-05 01:28:59,697 - Trainer - INFO - Epoch 3/10 completed - Train Loss: 0.0020 - Val Loss: 0.0099 - Best Val Loss: 0.0099
+2025-02-05 01:28:59,697 - Trainer - INFO - Starting epoch 4/10
+2025-02-05 01:28:59,699 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:31:54,556 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:34:48,775 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:37:42,993 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:40:37,215 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:43:31,437 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:46:25,654 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:49:19,860 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:52:14,069 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:52:32,875 - Trainer - INFO - Running validation for epoch 4...
+2025-02-05 01:53:19,777 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_3.pt
+2025-02-05 01:53:21,872 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_3.pt
+2025-02-05 01:53:24,021 - Trainer - INFO - Saved best model: checkpoints/best_model.pt
+2025-02-05 01:53:24,023 - Trainer - INFO - New best validation loss: 0.0098
+2025-02-05 01:53:24,024 - Trainer - INFO - Epoch 4/10 completed - Train Loss: 0.0002 - Val Loss: 0.0098 - Best Val Loss: 0.0098
+2025-02-05 01:53:24,024 - Trainer - INFO - Starting epoch 5/10
+2025-02-05 01:53:24,026 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:56:18,860 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 01:59:13,082 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:02:07,299 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:05:01,520 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:07:55,742 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:10:49,968 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:13:44,190 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:16:38,585 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:16:57,404 - Trainer - INFO - Running validation for epoch 5...
+2025-02-05 02:17:44,318 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_4.pt
+2025-02-05 02:17:46,375 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_4.pt
+2025-02-05 02:17:48,660 - Trainer - INFO - Saved best model: checkpoints/best_model.pt
+2025-02-05 02:17:48,661 - Trainer - INFO - New best validation loss: 0.0098
+2025-02-05 02:17:48,662 - Trainer - INFO - Epoch 5/10 completed - Train Loss: 0.0001 - Val Loss: 0.0098 - Best Val Loss: 0.0098
+2025-02-05 02:17:48,662 - Trainer - INFO - Starting epoch 6/10
+2025-02-05 02:17:48,664 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:20:43,587 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:23:37,923 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:26:32,261 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:29:26,583 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:32:20,919 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:35:15,275 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:38:09,618 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:41:03,955 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:41:22,776 - Trainer - INFO - Running validation for epoch 6...
+2025-02-05 02:42:09,778 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_5.pt
+2025-02-05 02:42:11,639 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_5.pt
+2025-02-05 02:42:13,591 - Trainer - INFO - Saved best model: checkpoints/best_model.pt
+2025-02-05 02:42:13,592 - Trainer - INFO - New best validation loss: 0.0097
+2025-02-05 02:42:13,592 - Trainer - INFO - Epoch 6/10 completed - Train Loss: 0.0001 - Val Loss: 0.0097 - Best Val Loss: 0.0097
+2025-02-05 02:42:13,593 - Trainer - INFO - Starting epoch 7/10
+2025-02-05 02:42:13,595 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:45:08,520 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:48:02,865 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:50:57,228 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:53:51,570 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:56:45,943 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 02:59:40,294 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:02:34,640 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:05:28,968 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:05:47,789 - Trainer - INFO - Running validation for epoch 7...
+2025-02-05 03:06:34,567 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_6.pt
+2025-02-05 03:06:36,629 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_6.pt
+2025-02-05 03:06:38,871 - Trainer - INFO - Saved best model: checkpoints/best_model.pt
+2025-02-05 03:06:38,873 - Trainer - INFO - New best validation loss: 0.0097
+2025-02-05 03:06:38,874 - Trainer - INFO - Epoch 7/10 completed - Train Loss: 0.0001 - Val Loss: 0.0097 - Best Val Loss: 0.0097
+2025-02-05 03:06:38,874 - Trainer - INFO - Starting epoch 8/10
+2025-02-05 03:06:38,876 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:09:33,852 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:12:28,209 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:15:22,565 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:18:16,923 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:21:11,223 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:24:05,563 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:26:59,899 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:29:54,233 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:30:13,053 - Trainer - INFO - Running validation for epoch 8...
+2025-02-05 03:30:59,906 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_7.pt
+2025-02-05 03:31:01,972 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_7.pt
+2025-02-05 03:31:04,152 - Trainer - INFO - Saved best model: checkpoints/best_model.pt
+2025-02-05 03:31:04,154 - Trainer - INFO - New best validation loss: 0.0097
+2025-02-05 03:31:04,154 - Trainer - INFO - Epoch 8/10 completed - Train Loss: 0.0000 - Val Loss: 0.0097 - Best Val Loss: 0.0097
+2025-02-05 03:31:04,154 - Trainer - INFO - Starting epoch 9/10
+2025-02-05 03:31:04,157 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:33:59,023 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:36:53,364 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:39:47,700 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:42:42,023 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:45:36,350 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:48:30,679 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:51:25,012 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:54:19,347 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:54:38,166 - Trainer - INFO - Running validation for epoch 9...
+2025-02-05 03:55:24,997 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_8.pt
+2025-02-05 03:55:27,033 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_8.pt
+2025-02-05 03:55:29,283 - Trainer - INFO - Saved best model: checkpoints/best_model.pt
+2025-02-05 03:55:29,284 - Trainer - INFO - New best validation loss: 0.0097
+2025-02-05 03:55:29,285 - Trainer - INFO - Epoch 9/10 completed - Train Loss: 0.0000 - Val Loss: 0.0097 - Best Val Loss: 0.0097
+2025-02-05 03:55:29,285 - Trainer - INFO - Starting epoch 10/10
+2025-02-05 03:55:29,288 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 03:58:24,184 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 04:01:18,514 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 04:04:12,850 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 04:07:07,163 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 04:10:01,476 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 04:12:55,783 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 04:15:50,104 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 04:18:44,426 - Trainer - INFO - GPU Memory used: 2.19 GB
+2025-02-05 04:19:03,244 - Trainer - INFO - Running validation for epoch 10...
+2025-02-05 04:19:50,135 - Trainer - INFO - Saved checkpoint: checkpoints/checkpoint_epoch_9.pt
+2025-02-05 04:19:50,136 - Trainer - INFO - Epoch 10/10 completed - Train Loss: 0.0000 - Val Loss: 0.0097 - Best Val Loss: 0.0097
+2025-02-05 04:19:54,454 - __main__ - INFO - Training completed. Best validation loss: 0.0097

@@ -178,7 +178,7 @@ class Trainer:
             self.optimizer.zero_grad()
             
             # Forward pass with mixed precision
-            with autocast('cuda', enabled=self.config.fp16):
+            with torch.amp.autocast(device_type='cuda', enabled=self.config.fp16):  # Fixed autocast
                 outputs = self.model(input_ids)
                 loss = torch.nn.functional.cross_entropy(
                     outputs.view(-1, outputs.size(-1)),
@@ -227,7 +227,7 @@ class Trainer:
                 input_ids = batch['input_ids'].to(self.device)
                 labels = batch['labels'].to(self.device)
                 
-                with autocast('cuda', enabled=self.config.fp16):
+                with torch.amp.autocast(device_type='cuda', enabled=self.config.fp16):  # Fixed autocast
                     outputs = self.model(input_ids)
                     loss = torch.nn.functional.cross_entropy(
                         outputs.view(-1, outputs.size(-1)),
@@ -236,7 +236,7 @@ class Trainer:
                 
                 total_loss += loss.item()
                 num_batches += 1
-                
+            
         return total_loss / num_batches if num_batches > 0 else float('inf')
         
     def train(self, resume_from: Optional[str] = None):

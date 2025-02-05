@@ -67,37 +67,67 @@ class MediumTransformer(nn.Module):
         
         return logits
 
-    def generate(self, input_ids, max_length=100, num_return_sequences=1,temperature=0.7, do_sample=True, pad_token_id=None,bos_token_id=None, eos_token_id=None):
-        """
-        Generate text from the model.
-        """
-        device = input_ids.device
-        batch_size = input_ids.shape[0]
-        cur_len = input_ids.shape[1]
-        
-        for _ in range(max_length - cur_len):
-            # Forward pass
-            with torch.no_grad():
-                outputs = self(input_ids)
-                next_token_logits = outputs[:, -1, :] / temperature
-                
-                if do_sample:
-                    # Sample from the distribution
-                    probs = torch.softmax(next_token_logits, dim=-1)
-                    next_tokens = torch.multinomial(probs, num_samples=1)
-                else:
-                    # Take the most likely token
-                    next_tokens = torch.argmax(next_token_logits, dim=-1, keepdim=True)
-                
-                # Concatenate new tokens
-                input_ids = torch.cat([input_ids, next_tokens], dim=-1)
-                
-                # Stop if EOS token is generated
-                if eos_token_id is not None and (next_tokens == eos_token_id).any():
-                    break
-                
-                # Stop if maximum length is reached
-                if input_ids.shape[1] >= max_length:
-                    break
-        
-        return input_ids
+    # src/model/transformer.py
+
+    def generate(self, input_ids, max_length=100, num_return_sequences=1,
+                temperature=0.7, do_sample=True, pad_token_id=None,
+                bos_token_id=None, eos_token_id=None, top_k=50, top_p=0.9,
+                repetition_penalty=1.2, no_repeat_ngram_size=3):
+        """Generate text tokens."""
+        try:
+            device = input_ids.device
+            batch_size = input_ids.shape[0]
+            cur_len = input_ids.shape[1]
+            vocab_size = self.token_embedding.weight.shape[0]
+            
+            # Store original input for return in case of error
+            original_input = input_ids.clone()
+            
+            for _ in range(max_length - cur_len):
+                with torch.no_grad():
+                    # Forward pass
+                    outputs = self(input_ids)
+                    next_token_logits = outputs[:, -1, :] / temperature
+                    
+                    # Apply filtering and sampling
+                    if top_k > 0:
+                        indices_to_remove = next_token_logits < torch.topk(next_token_logits, top_k)[0][..., -1, None]
+                        next_token_logits[indices_to_remove] = float('-inf')
+                    
+                    if top_p < 1.0:
+                        sorted_logits, sorted_indices = torch.sort(next_token_logits, descending=True)
+                        cumulative_probs = torch.cumsum(torch.softmax(sorted_logits, dim=-1), dim=-1)
+                        
+                        sorted_indices_to_remove = cumulative_probs > top_p
+                        sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
+                        sorted_indices_to_remove[..., 0] = 0
+                        
+                        for batch_idx in range(next_token_logits.shape[0]):
+                            indices_to_remove = sorted_indices[batch_idx][sorted_indices_to_remove[batch_idx]]
+                            next_token_logits[batch_idx, indices_to_remove] = float('-inf')
+                    
+                    # Sample next token
+                    if do_sample:
+                        probs = torch.softmax(next_token_logits, dim=-1)
+                        next_tokens = torch.multinomial(probs, num_samples=1)
+                    else:
+                        next_tokens = torch.argmax(next_token_logits, dim=-1, keepdim=True)
+                    
+                    # Check for EOS token
+                    if eos_token_id is not None:
+                        eos_in_next = (next_tokens == eos_token_id).any().item()
+                        if eos_in_next:
+                            break
+                    
+                    # Append new tokens
+                    input_ids = torch.cat([input_ids, next_tokens], dim=1)
+                    
+                    # Check sequence length
+                    if input_ids.shape[1] >= max_length:
+                        break
+            
+            return input_ids
+            
+        except Exception as e:
+            print(f"Error during generation: {str(e)}")
+            return original_input
